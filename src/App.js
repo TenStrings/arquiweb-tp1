@@ -1,25 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import MainMap from './components/MainMap';
+
+let defaultMapCenter = [39.9528, -75.1638];
 
 class App extends Component {
+
+  state = { mapCenter: defaultMapCenter }
+
+  componentWillMount() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.setState((state, props) =>
+        ({
+          mapCenter: [position.coords.latitude, position.coords.longitude],
+        })
+      )
+    })
+  }
+
   render() {
+    let markers = [{
+      position: this.state.mapCenter, popUpContent: (<div> Title: test </div>), key: "mapCenter"
+    }]
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <div>
+          <h1> Mapa mágico de categorías </h1>
+        </div>
+        <MainMap style={{height: "50%"}} mapCenter={this.state.mapCenter} markers={markers} />
+        <div>
+          <h1> Footer </h1>
+        </div>
       </div>
     );
   }
