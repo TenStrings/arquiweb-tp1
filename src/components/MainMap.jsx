@@ -24,12 +24,18 @@ class MainMap extends Component {
                 <Popup>{marker.popUpContent}</Popup>
             </Marker>)
 
+    onClick = e => {
+        let { onClick } = this.props
+        onClick && onClick(e.latlng)
+    }
+
     render() {
         return (
             <Map
                 center={this.props.mapCenter}
                 zoom={zoomLevel}
-                style={{ width: '100%', height: '400px' }}
+                style={{ height: '200px', ...this.props.style }}
+                onClick={this.onClick}
             >
                 <TileLayer
                     attribution={stamenTonerAttr}

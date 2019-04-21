@@ -1,38 +1,24 @@
 import React, { Component } from 'react';
 import './App.css';
-import MainMap from './components/MainMap';
+import NavigationMenu from './components/NavigationMenu';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import BackOffice from './pages/Backoffice';
 
-let defaultMapCenter = [39.9528, -75.1638];
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 class App extends Component {
-
-  state = { mapCenter: defaultMapCenter }
-
-  componentWillMount() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.setState((state, props) =>
-        ({
-          mapCenter: [position.coords.latitude, position.coords.longitude],
-        })
-      )
-    })
-  }
-
+  state = {}
   render() {
-    let markers = [{
-      position: this.state.mapCenter, popUpContent: (<div> Title: test </div>), key: "mapCenter"
-    }]
-
     return (
-      <div className="App">
-        <div>
-          <h1> Mapa mágico de categorías </h1>
-        </div>
-        <MainMap style={{height: "50%"}} mapCenter={this.state.mapCenter} markers={markers} />
-        <div>
-          <h1> Footer </h1>
-        </div>
-      </div>
+      <Router>
+        <NavigationMenu />
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route path='/login' component={Login} />
+          <Route path='/backoffice' component={BackOffice} />
+        </Switch>
+      </Router>
     );
   }
 }
