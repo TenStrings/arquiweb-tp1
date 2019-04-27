@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import MainMap from '../components/MainMap';
 import Categories from '../components/Categories';
+import POIFilter from '../components/POIFilter'
 
 import { Row, Col } from 'antd';
 
@@ -10,7 +11,11 @@ import { categoriesAPI, poiAPI } from '../api';
 let defaultMapCenter = [39.9528, -75.1638];
 
 class Home extends Component {
-  state = { mapCenter: defaultMapCenter, categories: [], poi: [] }
+  state = {
+    mapCenter: defaultMapCenter,
+    categories: [],
+    poi: [],
+  }
 
   updateCurrentPosition() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -38,15 +43,21 @@ class Home extends Component {
     )
   }
 
+  handlePOIFilterChange = poiFilter => {
+    this.setState({ poiFilter: poiFilter })
+  }
+
   render() {
+    const { poi, poiFilter } = this.state
+    const poiMarkers =
+      (poiFilter ? poiFilter(poi) : poi)
+        .map(poi => ({
+          position: poi.position,
+          popUpContent: (<div> Nombre: {poi.name} </div>),
+          key: poi.id,
+        }))
 
-    let poiMarkers = this.state.poi.map(poi => ({
-      position: poi.position,
-      popUpContent: (<div> Title: super interesting point </div>),
-      key: poi.id,
-    }))
-
-    let markers = [...poiMarkers, {
+    const markers = [...poiMarkers, {
       position: this.state.mapCenter, popUpContent: (<div> Title: test </div>), key: "mapCenter"
     }]
 
@@ -63,6 +74,7 @@ class Home extends Component {
               data={this.state.categories} />
           </Col>
           <Col span={20}>
+            <POIFilter onChange={this.handlePOIFilterChange} poi={poi}></POIFilter>
             <MainMap
               style={{ height: '400px' }}
               mapCenter={this.state.mapCenter} markers={markers}
