@@ -47,6 +47,16 @@ class Home extends Component {
     this.setState({ poiFilter: poiFilter })
   }
 
+  handleCategorySubmit  = (event) => {
+    event.preventDefault();
+    const name = event.target[0].value
+    /* aca habria que persistir la categoria*/
+    this.setState(state => {
+      let {categories} = state
+      return { categories: [ ...categories, {title: name , icon: "idk4" }] }
+    });
+  }
+
   render() {
     const { poi, poiFilter } = this.state
     const poiMarkers =
@@ -80,6 +90,13 @@ class Home extends Component {
               mapCenter={this.state.mapCenter} markers={markers}
               onClick={this.onClick} />
           </Col>
+          <form onSubmit={this.handleCategorySubmit}>
+          <label>
+            Category name:
+            <input type="text" name="name" />
+          </label>
+            <input type="submit" value="Add category" />
+          </form>
         </Row>
       </div>
     );
