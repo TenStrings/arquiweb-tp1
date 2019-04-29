@@ -5,9 +5,6 @@ import Categories from '../components/Categories';
 import POIFilter from '../components/POIFilter'
 
 import { Row, Col, Menu, Button, Dropdown, Card, Tag, Layout, Icon } from 'antd';
-import Jumbotron from 'react-bootstrap/Jumbotron'
-
-
 
 import { categoriesAPI, poiAPI } from '../api';
 
