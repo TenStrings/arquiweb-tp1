@@ -9,11 +9,13 @@ const pointsMock = [
         id: 1,
         position: { lat: -34.583192397850446, lng: -58.44321326835347 },
         name: "RamenHut",
+        description : "Descripcion prueba 1",
         category: 1
     },
     {
         id: 2,
         position: { lat: -34.57301606452501, lng: -58.454889807030376 },
+        description : "Descripcion prueba 2",
         name: "FutureBar",
         category: 2
     }

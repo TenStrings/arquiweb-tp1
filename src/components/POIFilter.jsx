@@ -38,14 +38,11 @@ class POIFilter extends React.Component {
         const filteredPoints = this.filterPoints(poi)
         return (
             <div>
-                <div style={{ display: "inline-flex"}}>
-                Filtrar:
-                </div>
                 <AutoComplete
                     dataSource={filteredPoints.map(poi => poi.name)}
                     style={{ width: 200, display: "inline-flex" }}
                     onChange={this.onChange}
-                    placeholder="Nombre"
+                    placeholder="Name"
                 />
             </div>
         );
