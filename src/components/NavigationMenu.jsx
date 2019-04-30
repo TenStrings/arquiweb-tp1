@@ -34,23 +34,23 @@ class NavigationMenu extends Component {
             >
                 <Menu.Item key="map">
                     <Link to="/">
-                          <Icon type="pushpin" />Map
+                          <Icon type="pushpin" />Mapa
                     </Link>
                 </Menu.Item>
 
-                <SubMenu title={<span><Icon type="tags" />Colaborate</span>}>
-                  <Menu.Item key="addPoint">Add new marker</Menu.Item>
-                  <Menu.Item key="suggestCat"> Suggest new category</Menu.Item>
+                <SubMenu title={<span><Icon type="tags" />Colaborar</span>}>
+                  <Menu.Item key="addPoint">Agregar marcador (temp)</Menu.Item>
+                  <Menu.Item key="suggestCat">Sugerir nueva categoría</Menu.Item>
                 </SubMenu>
 
                 <SubMenu title={<span><Icon type="setting" />Backoffice</span>}>
                   <Menu.Item key="addPoint">
                       <Link to="/backoffice_points"></Link>
-                      Manage markers
+                      Marcadores
                   </Menu.Item>
                   <Menu.Item key="suggestCat">
                       <Link to="/backoffice_categories"></Link>
-                      Manage categories
+                      Categorías
                   </Menu.Item>
                 </SubMenu>
 
