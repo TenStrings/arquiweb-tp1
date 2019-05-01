@@ -29,6 +29,10 @@ class MainMap extends Component {
         onClick && onClick(e.latlng)
     }
 
+    onContextMenu = e => {
+        alert("pepejulepe")
+    }
+
     render() {
         return (
             <Map
@@ -36,6 +40,7 @@ class MainMap extends Component {
                 zoom={zoomLevel}
                 style={{ height: '200px', ...this.props.style }}
                 onClick={this.onClick}
+                onContextMenu={this.onContextMenu}
             >
                 <TileLayer
                     attribution={stamenTonerAttr}

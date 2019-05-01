@@ -1,12 +1,24 @@
 const categoriesMock = [
-    { title: "category1", icon: "idk1" },
-    { title: "category2", icon: "idk2" },
-    { title: "category3", icon: "idk3" },
+    { id: 1, title: "Food", icon: "idk1" },
+    { id: 2, title: "Night life", icon: "idk2" },
+    { id: 3, title: "Sports", icon: "idk3" },
 ]
 
 const pointsMock = [
-    {id: 1, position: { lat: -34.583192397850446, lng: -58.44321326835347 }},
-    {id: 2, position: { lat: -34.57301606452501, lng: -58.454889807030376 }}
+    {
+        id: 1,
+        position: { lat: -34.583192397850446, lng: -58.44321326835347 },
+        name: "RamenHut",
+        description : "Descripcion prueba 1",
+        category: 1
+    },
+    {
+        id: 2,
+        position: { lat: -34.57301606452501, lng: -58.454889807030376 },
+        description : "Descripcion prueba 2",
+        name: "FutureBar",
+        category: 2
+    }
 ]
 
 export const categoriesAPI = {
