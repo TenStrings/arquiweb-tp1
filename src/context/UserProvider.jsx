@@ -10,6 +10,7 @@ class UserProvider extends Component {
         const user = token ? decode(token) : null
         this.state = {
             user: user,
+            token: token,
             login: this.login,
             logout: this.logout,
         }
