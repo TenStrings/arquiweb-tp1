@@ -6,6 +6,11 @@ import Login from './pages/Login';
 import BackofficeCategories from './pages/BackofficeCategories';
 import BackofficePoints from './pages/BackofficePoints';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { withUserContext } from './context/withUserContext';
+import UserProvider from './context/UserProvider';
+
+const ContextLogin = withUserContext(Login)
+const AuthenticatedNavigationMenu = withUserContext(NavigationMenu)
 
 class App extends Component {
   state = { loginModalShow: false }
@@ -13,15 +18,17 @@ class App extends Component {
     let loginModalClose = () => this.setState({ loginModalShow: false });
 
     return (
-      <Router>
-        <NavigationMenu />
-        <Switch>
-          <Route exact path='/' component={Home} />
-          <Route path='/backoffice_categories' component={BackofficeCategories} />
-          <Route path='/backoffice_points' component={BackofficePoints} />
-          <Route path='/login' component={Login} />
-        </Switch>
-      </Router>
+      <UserProvider>
+        <Router>
+          <AuthenticatedNavigationMenu />
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route path='/backoffice_categories' component={BackofficeCategories} />
+            <Route path='/backoffice_points' component={BackofficePoints} />
+            <Route path='/login' component={ContextLogin} />
+          </Switch>
+        </Router>
+      </UserProvider>
     );
   }
 }
