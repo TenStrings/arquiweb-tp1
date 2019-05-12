@@ -1,5 +1,3 @@
-import decode from 'jwt-decode'
-
 const categoriesMock = [
     { id: 1, title: "Food", icon: "idk1" },
     { id: 2, title: "Night life", icon: "idk2" },
