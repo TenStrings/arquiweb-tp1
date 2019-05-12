@@ -10,14 +10,16 @@ const pointsMock = [
         position: { lat: -34.583192397850446, lng: -58.44321326835347 },
         name: "RamenHut",
         description: "Descripcion prueba 1",
-        category: 1
+        category: 1,
+        visible: true,
     },
     {
         id: 2,
         position: { lat: -34.57301606452501, lng: -58.454889807030376 },
         description: "Descripcion prueba 2",
         name: "FutureBar",
-        category: 2
+        category: 2,
+        visible: true,
     }
 ]
 
@@ -30,6 +32,12 @@ export const categoriesAPI = {
 export const poiAPI = {
     all: function () {
         return Promise.resolve(pointsMock)
+    },
+    show: function (pointId, token) {
+        return new Promise(resolve => setTimeout(resolve, 1000))
+    },
+    hide: function (pointId, token) {
+        return new Promise(resolve => setTimeout(resolve, 1000))
     }
 }
 

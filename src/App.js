@@ -11,6 +11,7 @@ import UserProvider from './context/UserProvider';
 
 const ContextLogin = withUserContext(Login)
 const AuthenticatedNavigationMenu = withUserContext(NavigationMenu)
+const ContextBackofficePoints = withUserContext(BackofficePoints)
 
 class App extends Component {
   state = { loginModalShow: false }
@@ -24,7 +25,7 @@ class App extends Component {
           <Switch>
             <Route exact path='/' component={Home} />
             <Route path='/backoffice_categories' component={BackofficeCategories} />
-            <Route path='/backoffice_points' component={BackofficePoints} />
+            <Route path='/backoffice_points' component={ContextBackofficePoints} />
             <Route path='/login' component={ContextLogin} />
           </Switch>
         </Router>
