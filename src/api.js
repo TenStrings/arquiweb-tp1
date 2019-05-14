@@ -11,6 +11,7 @@ const pointsMock = [
         name: "RamenHut",
         description: "Descripcion prueba 1",
         category: 1,
+        category_name: "Food",
         visible: true,
     },
     {
@@ -19,6 +20,7 @@ const pointsMock = [
         description: "Descripcion prueba 2",
         name: "FutureBar",
         category: 2,
+        category_name: "Night Life",
         visible: true,
     }
 ]
