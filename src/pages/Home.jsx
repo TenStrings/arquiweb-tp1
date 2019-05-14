@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import MainMap from '../components/MainMap';
 import Categories from '../components/Categories';
 import POIFilter from '../components/POIFilter'
+import axios from 'axios'
 
 import { Row, Col, Menu, Button, Dropdown, Card, Tag, Layout, Icon } from 'antd';
 
@@ -36,6 +37,12 @@ class Home extends Component {
     console.log(latlong)
   }
 
+  loadPointsFromApi = () => axios.get('http://localhost:5000/point')
+  .then(res => {
+    console.log(res.data);
+    this.setState({poi : res.data});
+  });
+
   componentDidMount() {
     this.updateCurrentPosition()
 
@@ -43,10 +50,10 @@ class Home extends Component {
       categories => this.setState({ categories: categories })
     )
 
-    poiAPI.all().then(
-      poi => this.setState({ poi: poi })
-    )
+    this.loadPointsFromApi()
+
   }
+
 
   handlePOIFilterChange = poiFilter => {
     this.setState({ poiFilter: poiFilter })
