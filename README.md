@@ -2,6 +2,13 @@
 
 ## Available Scripts
 
+Dentro de la carpeta 'api' ejecutar:
+
+### 'docker-compose up --build'
+
+Buildea la api y levanta el webserver con la base de datos
+Se necesita tener instalado docker y docker-compose
+
 In the project directory, you can run:
 
 ### `npm start`
