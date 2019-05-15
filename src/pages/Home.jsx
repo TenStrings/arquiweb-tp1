@@ -4,22 +4,24 @@ import MainMap from '../components/MainMap';
 import Categories from '../components/Categories';
 import POIFilter from '../components/POIFilter'
 import axios from 'axios'
+import CategoryFilter from '../components/CategoryFilter'
 
-import { Row, Col, Menu, Button, Dropdown, Card, Tag, Layout, Icon } from 'antd';
+import { Row, Col, Menu, Button, Dropdown, Card, Tag, Layout, Icon, Checkbox } from 'antd';
 
 import { categoriesAPI, poiAPI } from '../api';
 
 let defaultMapCenter = [39.9528, -75.1638];
 
-function log(e) {
-  console.log(e);
-}
 
 class Home extends Component {
+  NoFilter = function(points){return points}
+
   state = {
     mapCenter: defaultMapCenter,
     categories: [],
-    poi: [],
+    points: [],
+    nameFilter: this.NoFilter,
+    categoryFilter : this.NoFilter,
     currentPointId: 9
   }
 
@@ -46,19 +48,28 @@ class Home extends Component {
   componentDidMount() {
     this.updateCurrentPosition()
 
-    categoriesAPI.all().then(
-      categories => this.setState({ categories: categories })
+    poiAPI.all().then( points =>
+       this.setState({ points: points })
+    )
+
+    categoriesAPI.all().then( categories =>
+      this.setState({ categories: categories })
     )
 
     this.loadPointsFromApi()
-
   }
-
 
   handlePOIFilterChange = poiFilter => {
     this.setState({ poiFilter: poiFilter })
   }
 
+  setNameFilter = aFilter => {
+    this.setState({ nameFilter: aFilter })
+  }
+
+  setCategoryFilter = aFilter => {
+    this.setState({ categoryFilter: aFilter })
+  }
 
 
   handleCategorySubmit  = event => {
@@ -79,134 +90,79 @@ class Home extends Component {
     alert(name)
 
     this.setState(state => {
-      let {poi} = state
+      let {points} = state
       let {currentPointId} = state
-      return { poi: [ ...poi, {name: name , position: { lat: lat, lng: long}, id: currentPointId + 1 }], currentPointId: currentPointId + 1 }
+      return { points: [ ...points, {name: name , position: { lat: lat, lng: long}, id: currentPointId + 1 }], currentPointId: currentPointId + 1 }
     });
 
   }
 
   render() {
-    const {
-      Header, Footer, Sider, Content,
-    } = Layout;
-
-    const { poi, poiFilter } = this.state
-    const poiMarkers =
-      (poiFilter ? poiFilter(poi) : poi)
-        .map(poi => ({
-          position: poi.position,
-          popUpContent: (<div> Name: {poi.name} <br/> Description: {poi.description}</div>),
-          key: poi.id,
+    const { Header, Footer, Sider, Content } = Layout;
+    const { points, categories, nameFilter, categoryFilter} = this.state;
+    const filteredPoints = nameFilter(categoryFilter(points));
+    const markers = filteredPoints.map(point => ({
+          position: point.position,
+          popUpContent: (<div> Name: {point.name} <br/> Description: {point.description}</div>),
+          key: point.id,
         }))
 
-    const markers = [...poiMarkers, {
-      position: this.state.mapCenter, popUpContent: (<div> Title: test </div>), key: "mapCenter"
+    const mapMarkers = [...markers, {
+      position: this.state.mapCenter, popUpContent: (<div> Title: myCurrentLocation </div>), key: "mapCenter"
     }]
 
-    const menu_categories =
-      <Menu>
-        <Menu.Item>
-          <a target="_blank" rel="noopener noreferrer" href="http://www.dc.uba.ar/">Category 1</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank" rel="noopener noreferrer" href="http://www.dc.uba.ar/">Category 2</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a target="_blank" rel="noopener noreferrer" href="http://www.dc.uba.ar/">Category 3</a>
-        </Menu.Item>
-      </Menu>
-
-    //<Categories data={this.state.categories} />
-    //<p>
-      //<POIFilter onChange={this.handlePOIFilterChange} poi={poi}></POIFilter>
-    //</p>
-    //<span className="ant-divider" style={{ margin: '0 1em' }} />
     return (
       <div className="App">
           <Layout>
-            <Sider style={{ background: '#FFFFFF'}} collapsible="true" collapsedWidth="0" span={10}>
-              <Categories data={this.state.categories} />
-            </Sider>
             <Content>
-            <Row id="Filtros" style={{ background: '#ECECEC', padding: '20px' }}  type="flex" >
-              <Col offset={1}>
-                <Card
-                 title="Match if name starts with..."
-                 style={{ width: 300 }}
-                >
-                  <POIFilter onChange={this.handlePOIFilterChange} poi={poi}></POIFilter>
-                </Card>
-              </Col>
-              <Col offset={1}>
-                <Card
-                 title="Match if belongs to any of the listed categories."
-                 style={{ width: 500 }}
-                >
-                  <Tag closable onClose={log} color="magenta">Peluquerias</Tag>
-                  <Tag closable onClose={log} color="red">Boliches</Tag>
-                  <Tag closable onClose={log} color="volcano">Deportes</Tag>
-                  <Tag closable onClose={log} color="orange">orange</Tag>
-                  <Tag closable onClose={log} color="gold">gold</Tag>
-                  <Tag closable onClose={log} color="lime">lime</Tag>
-                  <Tag closable onClose={log} color="green">green</Tag>
-                  <Tag closable onClose={log} color="cyan">cyan</Tag>
-                  <Tag closable onClose={log} color="blue">blue</Tag>
-                  <Tag closable onClose={log} color="geekblue">geekblue</Tag>
-                  <Tag closable onClose={log} color="purple">purple</Tag>
-                  <br /> <br />
-                  <Row type="flex" justify="center">
-                    <Dropdown overlay={menu_categories} placement="bottomLeft">
-                      <Button type="primary" shape="circle" justify="center" icon="plus"></Button>
-                    </Dropdown>
-                  </Row>
-                </Card>
 
-              </Col>
-            </Row>
-            <Row style={{ background: '#ECECEC'}}> <hr className="my-2" /> </Row>
+              <Row id="Mapa">
+                <Col>
+                  <MainMap
+                    style={{ height: '600px' }}
+                    mapCenter={this.state.mapCenter} markers={mapMarkers}
+                    onClick={this.onClick}
+                  />
+                </Col>
+              </Row>
 
-            <Row id="Mapa">
-              <Col>
-                <MainMap
-                  style={{ height: '400px' }}
-                  mapCenter={this.state.mapCenter} markers={markers}
-                  onClick={this.onClick}
-                />
-              </Col>
-            </Row>
+              <Row style={{ background: '#ECECEC'}}> <hr className="my-2" /> </Row>
+
+              <Row id="Filtros" style={{ background: '#ECECEC', padding: '20px' }}  type="flex" >
+                <Col offset={1}>
+                  <Card
+                   title="Match if name starts with..."
+                   style={{ width: 300 }}>
+                    <POIFilter onChange={this.setNameFilter} poi={points}></POIFilter>
+                  </Card>
+                </Col>
+                <Col offset={1}>
+                  <Card
+                    title="Match if belongs to any of the listed categories."
+                    style={{ width: 500 }}>
+                      <CategoryFilter
+                        key={categories}
+                        updateMapWith={this.setCategoryFilter}
+                        categories={categories} >
+                      </CategoryFilter>
+                  </Card>
+                </Col>
+              </Row>
             </Content>
           </Layout>
-          <Footer>Footer</Footer>
+          <Footer>
+            <form onSubmit={this.handleCategorySubmit}>
+              <input type="text" name="categoryName" placeholder="Category name" />
+              <input type="submit" value="Add category" />
+            </form>
 
-      <Row id="Row_1" type="flex" style={{padding: '20px' }} >
-
-        <Col id="Col_1" span={4}>
-
-        </Col>
-        <Col id="Col_2" span={15}>
-
-
-
-
-          </Col>
-
-        </Row>
-
-
-
-
-        <form onSubmit={this.handleCategorySubmit}>
-          <input type="text" name="categoryName" placeholder="Category name" />
-          <input type="submit" value="Add category" />
-        </form>
-
-        <form onSubmit={this.handlePointSubmit}>
-          <input type="text" name="name" placeholder="Point name" />
-          <input type="number" name="name" placeholder="latitude" />
-          <input type="number" name="name" placeholder="longitude" />
-          <input type="submit" value="Add Point" />
-        </form>
+            <form onSubmit={this.handlePointSubmit}>
+              <input type="text" name="name" placeholder="Point name" />
+              <input type="number" name="name" placeholder="latitude" />
+              <input type="number" name="name" placeholder="longitude" />
+              <input type="submit" value="Add Point" />
+            </form>
+          </Footer>
 
       </div>
     );

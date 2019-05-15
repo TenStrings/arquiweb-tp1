@@ -38,8 +38,9 @@ class NavigationMenu extends Component {
       >
         <Menu.Item key="map">
           <Link to="/">
-            <Icon type="pushpin" />Mapa
-                    </Link>
+            <Icon type="pushpin" />
+            Mapa
+          </Link>
         </Menu.Item>
 
         <SubMenu title={<span><Icon type="tags" />Colaborar</span>}>
@@ -51,11 +52,11 @@ class NavigationMenu extends Component {
             <Menu.Item key="addPoint">
               <Link to="/backoffice_points"></Link>
               Marcadores
-                  </Menu.Item>
+            </Menu.Item>
             <Menu.Item key="suggestCat">
               <Link to="/backoffice_categories"></Link>
               Categorías
-                  </Menu.Item>
+            </Menu.Item>
           </SubMenu>)
         }
         {

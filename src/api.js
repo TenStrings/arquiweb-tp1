@@ -1,6 +1,6 @@
 const categoriesMock = [
     { id: 1, title: "Food", icon: "idk1" },
-    { id: 2, title: "Night life", icon: "idk2" },
+    { id: 2, title: "Night Life", icon: "idk2" },
     { id: 3, title: "Sports", icon: "idk3" },
 ]
 
@@ -11,6 +11,7 @@ const pointsMock = [
         name: "RamenHut",
         description: "Descripcion prueba 1",
         category: 1,
+        category_name: "Food",
         visible: true,
     },
     {
@@ -19,9 +20,12 @@ const pointsMock = [
         description: "Descripcion prueba 2",
         name: "FutureBar",
         category: 2,
+        category_name: "Night Life",
         visible: true,
     }
 ]
+
+//return Promise.resolve(categoriesMock)
 
 export const categoriesAPI = {
     all: function () {
