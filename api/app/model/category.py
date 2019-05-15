@@ -1,7 +1,6 @@
-from utils.jsonSerializable import JsonSerializable
 
 
-class Category(JsonSerializable):
+class Category():
 
     def __init__(self, id, title, icon):
         self.id = id

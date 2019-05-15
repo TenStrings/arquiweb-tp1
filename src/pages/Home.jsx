@@ -37,7 +37,7 @@ class Home extends Component {
     console.log(latlong)
   }
 
-  loadPointsFromApi = () => axios.get('http://localhost:5000/point')
+  loadPointsFromApi = () => axios.get('http://localhost:4000/point')
   .then(res => {
     console.log(res.data);
     this.setState({poi : res.data});
