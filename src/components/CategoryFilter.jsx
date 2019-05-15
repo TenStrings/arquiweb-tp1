@@ -1,27 +1,27 @@
 import React from 'react';
 import {Tag} from 'antd';
+import { categoriesAPI } from '../api';
 
 const CheckableTag = Tag.CheckableTag;
 const tag_colors = ["magenta", "red", "volcano", "orange", "gold", "lime",
                     "green", "cyan", "blue", "geekblue", "purple"]
 
+
 class CategoryFilter extends React.Component {
-
     state = {
-      selected_categories : []
-    }
+      selected_categories: new Set(this.props.categories.map( c => c.title))
+    };
 
-    componentDidMount(){
-      this.setState((state, props) => ({
-          selected_categories: new Set(props.categories.map( category => category.title )),
-        })
-      )
-    }
-
-    handleChange(category_name, checked) {
-      const { selected_categories } = this.state;
-      const nextSelectedTags = checked ? selected_categories.add(category_name) : selected_categories.delete(category_name);
-      this.setState({ selected_categories: nextSelectedTags }, this.notifyChange);
+    onTagChangeDo(category_name, checked) {
+      this.setState(
+        state => {
+          const {selected_categories} = state
+          const new_categories = new Set(selected_categories)
+          if(checked) new_categories.add(category_name)
+          else new_categories.delete(category_name)
+          return { selected_categories: new_categories }
+        },
+        this.notifyChange);
     }
 
     notifyChange = () => {
@@ -29,28 +29,26 @@ class CategoryFilter extends React.Component {
     }
 
     filterPoints = points => {
-        const {selected_categories} = this.state
-        console.log("hello");
-        return points.filter(point => {
-            return selected_categories.has(point.category_name)
-        })
+        const {selected_categories} = this.state;
+        return points.filter(poi => selected_categories.has(poi.category_name))
     }
-    //
+
     render() {
-        const all_categories = this.props.categories;
         const { selected_categories } = this.state;
         return (
           <div>
-          {all_categories.map(category => (
+          {
+            this.props.categories.map(category => (
                 <CheckableTag
                   key={category.title}
-                  checked={ tag => selected_categories.has(tag.key) > -1}
-                  onChange={ checked => this.handleChange(category.title, checked)}
+                  checked={ selected_categories.has(category.title) }
+                  onChange={ checked => this.onTagChangeDo(category.title, checked)}
                 >
                   {category.title}
                 </CheckableTag>
-              ))}
-            </div>
+            ))
+          }
+          </div>
         );
     }
 }

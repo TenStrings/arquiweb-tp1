@@ -25,7 +25,8 @@ class Home extends Component {
     points: [],
     nameFilter: this.NoFilter,
     categoryFilter : this.NoFilter,
-    currentPointId: 9
+    currentPointId: 9,
+    renewOnCategoriesChange : true
   }
 
   updateCurrentPosition() {
@@ -45,13 +46,13 @@ class Home extends Component {
   componentDidMount() {
     this.updateCurrentPosition()
 
+    poiAPI.all().then(
+      points => this.setState({ points: points })
+    )
     categoriesAPI.all().then(
       categories => this.setState({ categories: categories })
     )
 
-    poiAPI.all().then(
-      points => this.setState({ points: points })
-    )
   }
 
   setNameFilter = aFilter => {
@@ -89,7 +90,7 @@ class Home extends Component {
   }
 
   render() {
-    const {Header, Footer, Sider, Content} = Layout;
+    const { Header, Footer, Sider, Content } = Layout;
     const { points, categories, nameFilter, categoryFilter} = this.state;
     const filteredPoints = nameFilter(categoryFilter(points));
     const markers = filteredPoints.map(point => ({
@@ -119,7 +120,6 @@ class Home extends Component {
 
               <Row style={{ background: '#ECECEC'}}> <hr className="my-2" /> </Row>
 
-
               <Row id="Filtros" style={{ background: '#ECECEC', padding: '20px' }}  type="flex" >
                 <Col offset={1}>
                   <Card
@@ -132,8 +132,11 @@ class Home extends Component {
                   <Card
                     title="Match if belongs to any of the listed categories."
                     style={{ width: 500 }}>
-                    <CategoryFilter updateMapWith={this.setCategoryFilter} categories={categories} ></CategoryFilter>
-
+                      <CategoryFilter
+                        key={categories}
+                        updateMapWith={this.setCategoryFilter}
+                        categories={categories} >
+                      </CategoryFilter>
                   </Card>
                 </Col>
               </Row>
