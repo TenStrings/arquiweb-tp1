@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
 import { Table, Icon, Button, Switch } from 'antd';
 import { poiAPI, categoriesAPI } from '../api';
+import axios from 'axios'
+
 
 class BackofficePoints extends Component {
   state = { loading: {} }
 
+  /*
   getPoints = () => poiAPI.all().then(points => this.setState({ points: points }))
 
   getCategories = () => categoriesAPI.all().then(
     categories => this.setState({ categories: categories })
   )
-
   componentDidMount() {
     this.getCategories()
     this.getPoints()
-  }
+  }*/
 
   toggleLoading(pointId) {
     this.setState(
@@ -27,22 +29,33 @@ class BackofficePoints extends Component {
     )
   }
 
+  updatePoint = (point) => axios.put('http://localhost:4000/point/' + point._id, point)
+  .then(res => {
+    //console.log(res.data);
+    this.setState({points : res.data});
+  });
+
   onChange = (checked, pointId) => {
     const { userContext } = this.props
 
     const toggleLoading = () => this.toggleLoading(pointId)
-    toggleLoading()
 
     if (checked) {
-      poiAPI.hide(pointId, userContext.token).then(
-        toggleLoading
-      )
+      let pointToUpdate = this.props.points.find(point => point._id == pointId)
+      pointToUpdate.visible = false
+      console.log("showingngngngngn pointsssss")
+      console.log(pointToUpdate)
+      this.updatePoint(pointToUpdate)
     }
     else {
-      poiAPI.show(pointId, userContext.token).then(
-        toggleLoading
-      )
+      let pointToUpdate = this.props.points.find(point => point._id == pointId)
+      pointToUpdate.visible = true
+      console.log("showingngngngngn pointsssss")
+      console.log(pointToUpdate)
+      this.updatePoint(pointToUpdate)
+
     }
+    this.props.notifyPoiChange()
   }
 
   render() {
@@ -56,6 +69,7 @@ class BackofficePoints extends Component {
       {
         title: 'Latitud', dataIndex: 'lat', width: 100,
       },
+
       {
         title: 'Longitud', dataIndex: 'long', width: 100,
       },
@@ -76,19 +90,20 @@ class BackofficePoints extends Component {
       }
     ];
 
-    const { points, categories, loading } = this.state;
+    const { loading } = this.state;
+    const { points, categories } = this.props;
 
     const data = points && categories && points.map(
       point => ({
-        key: point.id,
+        key: point._id,
         name: point.name,
         lat: point.position.lat,
         long: point.position.long,
         description: point.description,
         img: "unBoton a img",
-        cat: categories.find(category => category.id == point.category).title,
-        visible: <Switch loading={loading[point.id]} defaultChecked={point.visible} onChange={checked =>
-          this.onChange(checked, point.id)
+        cat: point.categoryName,
+        visible: <Switch loading={loading[point._id]} defaultChecked={point.visible} onChange={checked =>
+          this.onChange(checked, point._id)
         } />,
         edit: <Button type="primary" shape="circle" icon="edit"></Button>,
         delete: <Button type="danger" shape="circle" icon="delete"></Button>

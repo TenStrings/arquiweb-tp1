@@ -1,26 +1,22 @@
 const categoriesMock = [
-    { id: 1, title: "Food", icon: "idk1" },
-    { id: 2, title: "Night Life", icon: "idk2" },
-    { id: 3, title: "Sports", icon: "idk3" },
+    { title: "Food", icon: "idk1" },
+    { title: "Night Life", icon: "idk2" },
+    { title: "Sports", icon: "idk3" },
 ]
 
 const pointsMock = [
     {
-        id: 1,
         position: { lat: -34.583192397850446, lng: -58.44321326835347 },
-        name: "RamenHut",
+        name: "RamenHutt",
         description: "Descripcion prueba 1",
-        category: 1,
-        category_name: "Food",
+        categoryName: "Food",
         visible: true,
     },
     {
-        id: 2,
         position: { lat: -34.57301606452501, lng: -58.454889807030376 },
         description: "Descripcion prueba 2",
         name: "FutureBar",
-        category: 2,
-        category_name: "Night Life",
+        categoryName: "Night Life",
         visible: true,
     }
 ]

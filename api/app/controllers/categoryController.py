@@ -4,32 +4,32 @@ from flask import Blueprint, jsonify, request
 
 from app.model.point import Point
 
-point = Blueprint("point", __name__)
+category = Blueprint("category", __name__)
 
 # no cambiar el lugar del import por las dependencias circulares
 from app import mongo
 
 
-@point.route('/point', methods=['GET'])
-def getAllPoints():
-    allPoints = mongo.db.points.find({})
-    result = [point for point in allPoints]
+@category.route('/category', methods=['GET'])
+def getAllCategories():
+    allCategories = mongo.db.categories.find({})
+    result = [cat for cat in allCategories]
     response = flask.make_response(jsonify(result))
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
 
-@point.route('/point', methods=['POST'])
-def addPoint():
+
+@category.route('/category', methods=['POST'])
+def addCategory():
     pointData = request.get_json()
 
     name = pointData['name']
     position = pointData['position']
     description = pointData['description']
     category = pointData['category']
-    visible = pointData['visible']
 
-    point = Point(position, name, description, category, visible)
+    point = Point(position, name, description, category)
 
     mongo.db.points.insert_one(point.__dict__)
     response = flask.make_response(jsonify({'point inserted': True}))
@@ -37,27 +37,8 @@ def addPoint():
 
     return response, 201
 
-@point.route('/point/<id>', methods=['PUT'])
-def putPoint(id):
-    pointData = request.get_json()
 
-    name = pointData['name']
-    position = pointData['position']
-    description = pointData['description']
-    category = pointData['categoryName']
-    visible = pointData['visible']
-
-    point = Point(position, name, description, category, visible)
-    print("point", point, flush=True)
-    ack = mongo.db.points.update({_id : id}, point.__dict__)
-    print("ack", ack)
-
-    response = flask.make_response(jsonify({'point inserted': True}))
-    response.headers['Access-Control-Allow-Origin'] = '*'
-
-    return response, 201
-
-@point.route('/point/<id>', methods=['DELETE'])
+@category.route('/category/<id>', methods=['DELETE'])
 def deletePoint(id):
     db_response = mongo.db.points.delete_one({'_id': ObjectId(id)})
     if db_response.deleted_count == 1:
@@ -72,7 +53,7 @@ def deletePoint(id):
         return response, 404
 
 
-@point.route('/point', methods=['DELETE'])
+@category.route('/category', methods=['DELETE'])
 def deleteAllPoints():
     mongo.db.points.remove({})
 

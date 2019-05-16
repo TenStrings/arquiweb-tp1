@@ -18,8 +18,6 @@ class Home extends Component {
 
   state = {
     mapCenter: defaultMapCenter,
-    categories: [],
-    points: [],
     nameFilter: this.NoFilter,
     categoryFilter : this.NoFilter,
     currentPointId: 9
@@ -39,28 +37,9 @@ class Home extends Component {
     console.log(latlong)
   }
 
-  loadPointsFromApi = () => axios.get('http://localhost:4000/point')
-  .then(res => {
-    console.log(res.data);
-    this.setState({poi : res.data});
-  });
-
   componentDidMount() {
     this.updateCurrentPosition()
 
-    poiAPI.all().then( points =>
-       this.setState({ points: points })
-    )
-
-    categoriesAPI.all().then( categories =>
-      this.setState({ categories: categories })
-    )
-
-    this.loadPointsFromApi()
-  }
-
-  handlePOIFilterChange = poiFilter => {
-    this.setState({ poiFilter: poiFilter })
   }
 
   setNameFilter = aFilter => {
@@ -98,8 +77,13 @@ class Home extends Component {
   }
 
   render() {
+    console.log("rendering home")
+    console.log(this.props.categories)
     const { Header, Footer, Sider, Content } = Layout;
-    const { points, categories, nameFilter, categoryFilter} = this.state;
+    const { nameFilter, categoryFilter} = this.state;
+    const { points, categories} = this.props;
+    console.log("home points")
+    console.log(points)
     const filteredPoints = nameFilter(categoryFilter(points));
     const markers = filteredPoints.map(point => ({
           position: point.position,

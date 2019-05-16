@@ -1,8 +1,7 @@
 
 
-class Category():
+class Category:
 
-    def __init__(self, id, title, icon):
-        self.id = id
-        self. title = title
+    def __init__(self, title, icon):
+        self.title = title
         self.icon = icon
