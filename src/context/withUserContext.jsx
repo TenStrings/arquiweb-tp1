@@ -10,7 +10,7 @@ export function withUserContext(WrappedComponent) {
                 <UserContext.Consumer>
                     {
                         userContext => (
-                            <WrappedComponent userContext={userContext}/>
+                            <WrappedComponent {...this.props} userContext={userContext}/>
                         )
                     }
                 </UserContext.Consumer>

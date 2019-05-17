@@ -26,22 +26,15 @@ class CategoryFilter extends React.Component {
 
     notifyChange = () => {
         this.props.updateMapWith(this.filterPoints)
-        console.log("FILTRO")
-
-        console.log(this.filterPoints)
     }
 
     filterPoints = points => {
         const {selected_categories} = this.state;
-        console.log("filtering categories")
-        console.log(selected_categories)
         return points.filter(point => selected_categories.has(point.categoryName))
     }
 
     render() {
         const { selected_categories } = this.state;
-        console.log("rendering filter")
-        console.log(selected_categories)
         return (
           <div>
           {

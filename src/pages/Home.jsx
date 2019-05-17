@@ -77,13 +77,9 @@ class Home extends Component {
   }
 
   render() {
-    console.log("rendering home")
-    console.log(this.props.categories)
     const { Header, Footer, Sider, Content } = Layout;
     const { nameFilter, categoryFilter} = this.state;
     const { points, categories} = this.props;
-    console.log("home points")
-    console.log(points)
     const filteredPoints = nameFilter(categoryFilter(points));
     const markers = filteredPoints.map(point => ({
           position: point.position,

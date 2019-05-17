@@ -31,32 +31,18 @@ class BackofficePoints extends Component {
 
   updatePoint = (point) => axios.put('http://localhost:4000/point/' + point._id, point)
   .then(res => {
-    //console.log(res.data);
-    this.setState({points : res.data});
-  });
+    this.props.notifyPoiChange()
+    //this.toggleLoading(point._id)
+  }).catch( () => console.log("BackofficePoints failed to update point"));
 
   onChange = (checked, pointId) => {
     const { userContext } = this.props
-
-    const toggleLoading = () => this.toggleLoading(pointId)
-
-    if (checked) {
-      let pointToUpdate = this.props.points.find(point => point._id == pointId)
-      pointToUpdate.visible = false
-      console.log("showingngngngngn pointsssss")
-      console.log(pointToUpdate)
-      this.updatePoint(pointToUpdate)
-    }
-    else {
-      let pointToUpdate = this.props.points.find(point => point._id == pointId)
-      pointToUpdate.visible = true
-      console.log("showingngngngngn pointsssss")
-      console.log(pointToUpdate)
-      this.updatePoint(pointToUpdate)
-
-    }
-    this.props.notifyPoiChange()
+    //this.toggleLoading(pointId)
+    let pointToUpdate = this.props.points.find(point => point._id == pointId)
+    pointToUpdate.visible = !checked
+    this.updatePoint(pointToUpdate)
   }
+
 
   render() {
     const columns = [
@@ -69,9 +55,8 @@ class BackofficePoints extends Component {
       {
         title: 'Latitud', dataIndex: 'lat', width: 100,
       },
-
       {
-        title: 'Longitud', dataIndex: 'long', width: 100,
+        title: 'Longitud', dataIndex: 'lng', width: 100,
       },
       {
         title: 'Imagen', dataIndex: 'img', width: 50, //button with card or popUp with image
@@ -98,7 +83,7 @@ class BackofficePoints extends Component {
         key: point._id,
         name: point.name,
         lat: point.position.lat,
-        long: point.position.long,
+        lng: point.position.lng,
         description: point.description,
         img: "unBoton a img",
         cat: point.categoryName,

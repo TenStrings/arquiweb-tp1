@@ -67,8 +67,6 @@ selected_categories
     let loginModalClose = () => this.setState({ loginModalShow: false });
     const { points, categories } = this.state;
     const visiblePoints = points.filter(point => point.visible)
-    console.log("rendering app")
-    console.log(categories)
     return (
       <UserProvider>
         <Router>
@@ -78,7 +76,7 @@ selected_categories
             <Route path='/backoffice_categories' component={BackofficeCategories} />
             <Route path='/login' component={ContextLogin} />
             <Route path="/backoffice_points" render={(props) => (
-              <BackofficePoints  {...props} key={points} notifyPoiChange={this.onPointChange} points={points} categories={categories} /> )}/>
+              <ContextBackofficePoints {...props} key={points} notifyPoiChange={this.onPointChange} points={points} categories={categories} /> )}/>
           </Switch>
         </Router>
       </UserProvider>
