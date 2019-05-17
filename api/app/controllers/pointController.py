@@ -49,7 +49,7 @@ def putPoint(id):
 
     point = Point(position, name, description, category, visible)
     print("point", point, flush=True)
-    ack = mongo.db.points.update({_id : id}, point.__dict__)
+    ack = mongo.db.points.update({'_id' : ObjectId(id)}, point.__dict__)
     print("ack", ack)
 
     response = flask.make_response(jsonify({'point inserted': True}))
