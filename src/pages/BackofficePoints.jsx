@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
 import { Table, Icon, Button, Switch } from 'antd';
 import { poiAPI, categoriesAPI } from '../api';
-import axios from 'axios'
-
+import axios from 'axios';
+import PointModal from '../components/PointModal';
 
 class BackofficePoints extends Component {
   state = { loading: {} }
-
-  /*
-  getPoints = () => poiAPI.all().then(points => this.setState({ points: points }))
-
-  getCategories = () => categoriesAPI.all().then(
-    categories => this.setState({ categories: categories })
-  )
-  componentDidMount() {
-    this.getCategories()
-    this.getPoints()
-  }*/
 
   toggleLoading(pointId) {
     this.setState(
@@ -30,10 +19,10 @@ class BackofficePoints extends Component {
   }
 
   updatePoint = (point) => axios.put('http://localhost:4000/point/' + point._id, point)
-  .then(res => {
-    this.props.notifyPoiChange()
-    //this.toggleLoading(point._id)
-  }).catch( () => console.log("BackofficePoints failed to update point"));
+    .then(res => {
+      this.props.notifyPoiChange()
+      //this.toggleLoading(point._id)
+    }).catch(() => console.log("BackofficePoints failed to update point"));
 
   onChange = (checked, pointId) => {
     const { userContext } = this.props
@@ -43,6 +32,42 @@ class BackofficePoints extends Component {
     this.updatePoint(pointToUpdate)
   }
 
+  showEditModal = point => {
+    const form = this.formRef.props.form;
+    form.setFieldsValue({ name: point.name, description: point.description }, () => {
+      this.setState({ modal: point})}
+    )
+  }
+
+  saveFormRef = formRef => {
+    this.formRef = formRef
+  }
+
+  handleCancel = () => {
+    const form = this.formRef.props.form;
+    form.resetFields()
+    this.setState({ modal: null })
+  }
+
+  handleConfirm = () => {
+    const form = this.formRef.props.form;
+    form.validateFields((err, values) => {
+      //TODO: Validar en serio xD
+      if (err) {
+        return;
+      }
+
+      const newPoint = {...this.state.modal, ...values };
+
+      console.log(newPoint)
+
+      //TODO: Probablemente esto debería ser una promise
+      this.updatePoint(newPoint)
+
+      form.resetFields();
+      this.setState({ modal: null });
+    });
+  }
 
   render() {
     const columns = [
@@ -90,12 +115,23 @@ class BackofficePoints extends Component {
         visible: <Switch loading={loading[point._id]} defaultChecked={point.visible} onChange={checked =>
           this.onChange(checked, point._id)
         } />,
-        edit: <Button type="primary" shape="circle" icon="edit"></Button>,
+        edit: <Button type="primary" shape="circle" icon="edit" onClick={
+          () => this.showEditModal(point)
+        }></Button>,
         delete: <Button type="danger" shape="circle" icon="delete"></Button>
       })
     )
 
-    return (<Table columns={columns} dataSource={data} scroll={{ y: 600 }} />);
+    return (
+      <React.Fragment>
+        <Table columns={columns} dataSource={data} scroll={{ y: 600 }} />);
+        <PointModal
+          wrappedComponentRef={this.saveFormRef}
+          visible={Boolean(this.state.modal)}
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
+        />
+      </React.Fragment>)
   }
 }
 
