@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Icon, Button, Switch } from 'antd';
-import { poiAPI, categoriesAPI } from '../api';
+import { Table, Button, Switch } from 'antd';
 import axios from 'axios';
 import PointModal from '../components/PointModal';
 
@@ -25,9 +24,9 @@ class BackofficePoints extends Component {
     }).catch(() => console.log("BackofficePoints failed to update point"));
 
   onChange = (checked, pointId) => {
-    const { userContext } = this.props
+    //const { userContext } = this.props
     //this.toggleLoading(pointId)
-    let pointToUpdate = this.props.points.find(point => point._id == pointId)
+    let pointToUpdate = this.props.points.find(point => point._id === pointId)
     pointToUpdate.visible = !checked
     this.updatePoint(pointToUpdate)
   }

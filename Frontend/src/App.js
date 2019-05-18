@@ -29,9 +29,9 @@ const ContextBackofficePoints = withUserContext(BackofficePoints)
 class App extends Component {
 
   state = {
-      loginModalShow: false,
-      points: [],
-      categories: []
+    loginModalShow: false,
+    points: [],
+    categories: []
   }
 
   componentDidMount() {
@@ -43,16 +43,16 @@ class App extends Component {
 
 
   loadPointsFromAPI = () => axios.get('http://localhost:4000/point')
-  .then(res => {
-    //console.log(res.data);
-    this.setState({points : res.data});
-  });
+    .then(res => {
+      //console.log(res.data);
+      this.setState({ points: res.data });
+    });
 
   loadCategoriesFromAPI = () => axios.get('http://localhost:4000/category')
-  .then(res => {
-    //console.log(res.data);pointId
-    this.setState({categories : res.data});
-  });
+    .then(res => {
+      //console.log(res.data);pointId
+      this.setState({ categories: res.data });
+    });
 
   onPointChange = () => this.loadPointsFromAPI()
 
@@ -61,10 +61,9 @@ class App extends Component {
   getCategories = () => categoriesAPI.all().then(
     categories => this.setState({ categories: categories })
   )
-selected_categories
+  selected_categories
   //<Route path='/backoffice_points' component={ContextBackofficePoints} />
   render() {
-    let loginModalClose = () => this.setState({ loginModalShow: false });
     const { points, categories } = this.state;
     const visiblePoints = points.filter(point => point.visible)
     return (
@@ -72,11 +71,11 @@ selected_categories
         <Router>
           <AuthenticatedNavigationMenu />
           <Switch>
-             {categories.length>0 && <Route exact path='/' render={props => (<Home {...props} points={visiblePoints} categories={categories} /> )} />}
+            {categories.length > 0 && <Route exact path='/' render={props => (<Home {...props} points={visiblePoints} categories={categories} />)} />}
             <Route path='/backoffice_categories' component={BackofficeCategories} />
             <Route path='/login' component={ContextLogin} />
             <Route path="/backoffice_points" render={(props) => (
-              <ContextBackofficePoints {...props} key={points} notifyPoiChange={this.onPointChange} points={points} categories={categories} /> )}/>
+              <ContextBackofficePoints {...props} key={points} notifyPoiChange={this.onPointChange} points={points} categories={categories} />)} />
           </Switch>
         </Router>
       </UserProvider>

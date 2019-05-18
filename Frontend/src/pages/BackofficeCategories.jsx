@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Icon, Button, Switch } from 'antd';
+import { Table, Button, Switch } from 'antd';
 
 function onChange(checked) {
   console.log(`switch to ${checked}`);

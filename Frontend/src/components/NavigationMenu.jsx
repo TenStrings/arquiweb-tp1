@@ -19,17 +19,7 @@ class NavigationMenu extends Component {
 
   render() {
     const { user } = this.props.userContext
-    const menu_colaborate = (
-      <Menu>
-        <Menu.Item>
-          <a>Add marker</a>
-        </Menu.Item>
-        <Menu.Item>
-          <a>Suggest new category</a>
-        </Menu.Item>
 
-      </Menu>
-    )
     return (
       <Menu
         onClick={this.handleClick}
