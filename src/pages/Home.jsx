@@ -84,7 +84,7 @@ class Home extends Component {
     const markers = filteredPoints.map(point => ({
           position: point.position,
           popUpContent: (<div> Name: {point.name} <br/> Description: {point.description}</div>),
-          key: point.id,
+          key: point.name,
         }))
 
     const mapMarkers = [...markers, {
