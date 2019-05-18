@@ -1,4 +1,4 @@
-import { Button, Modal, Form, Input, Radio } from 'antd';
+import {  Modal, Form, Input } from 'antd';
 import React from 'react';
 
 const PointEditForm = Form.create({ name: 'edit_point_in_modal' })(

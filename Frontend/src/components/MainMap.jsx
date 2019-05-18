@@ -14,15 +14,48 @@ L.Icon.Default.mergeOptions({
 const tiles = "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
 const stamenTonerAttr = 'change this';
 const zoomLevel = 12;
+const FCENLocation = [39.9528, -75.1638];
+
 
 class MainMap extends Component {
-    state = {}
+    state = {
+      currentPosition : FCENLocation
+    }
 
-    markers = () =>
-        this.props.markers.map(marker =>
-            <Marker position={marker.position} key={marker.key}>
+    componentDidMount() {
+        this.updateCurrentPosition()
+    }
+
+    //TODO update every 10 seconds
+    updateCurrentPosition = () => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setState((state, props) =>
+          ({
+            currentPosition: [position.coords.latitude, position.coords.longitude],
+          })
+        )
+      })
+    }
+
+    getMarkers = function() {
+        let markers = this.props.markers.map(marker =>
+            <Marker key={marker.key} position={marker.position} >
                 <Popup>{marker.popUpContent}</Popup>
-            </Marker>)
+            </Marker>
+        )
+
+        if(this.props.ShowMyPosition) {
+          const myPostionMarker = (
+            <Marker key={"mapCenter"} position={this.state.currentPosition} >
+                <Popup>{ (<div> Title: MyPosition </div>)}</Popup>
+            </Marker>
+          )
+          markers.push(myPostionMarker)
+        }
+
+        return markers
+    }
+    //Events
 
     onClick = e => {
         let { onClick } = this.props
@@ -30,13 +63,13 @@ class MainMap extends Component {
     }
 
     onContextMenu = e => {
-        alert("pepejulepe")
+        alert("Testing context menu event")
     }
 
     render() {
         return (
             <Map
-                center={this.props.mapCenter}
+                center={this.state.currentPosition}
                 zoom={zoomLevel}
                 style={{ height: '200px', ...this.props.style }}
                 onClick={this.onClick}
@@ -46,7 +79,7 @@ class MainMap extends Component {
                     attribution={stamenTonerAttr}
                     url={tiles}
                 />
-                {this.props.markers && this.markers()}
+                {this.props.markers && this.getMarkers()}
             </Map>
         );
     }

@@ -1,10 +1,12 @@
 import os
 from flask import Flask
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 from app.utils.jsonEncoder import JSONEncoder
 
 
 app = Flask(__name__)
+CORS(app)
 app.config['MONGO_URI'] = os.environ.get('DB')
 app.json_encoder = JSONEncoder
 mongo = PyMongo(app)
