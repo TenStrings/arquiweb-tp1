@@ -81,7 +81,7 @@ def updatePoint(id):
     values['image'] = name + str(random.randint(0,1000)) #para que cambie y refresque
     values['categoryName'] = categoryName
 
-    print('llega8', flush=True)
+    print('llega8', values, flush=True)
 
     try:
         print('llega9', flush=True)

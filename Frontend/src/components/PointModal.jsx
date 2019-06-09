@@ -24,6 +24,11 @@ export const PointEditForm = Form.create({ name: 'edit_point_in_modal' })(
             <Form.Item label="Descripción">
               {getFieldDecorator('description')(<Input type="textarea" />)}
             </Form.Item>
+            <Form.Item label="Categoria">
+              {getFieldDecorator('categoryName', {
+                rules: [{ required: true, message: 'Por favor ingrese el nombre de la categoria' }],
+              })(<Input />)}
+            </Form.Item>
 
             <Form.Item label="Imagen">
              {getFieldDecorator('image', {
